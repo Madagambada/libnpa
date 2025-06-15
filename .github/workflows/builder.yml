@@ -1,0 +1,47 @@
+name: libnpa Release builder
+run-name: Release Build ${{ github.ref_name }}
+
+on:
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - 'libnpa-*'
+  
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: jirutka/setup-alpine@v1
+      with:
+        branch: edge
+        packages: >
+          boost-dev
+          make
+          cmake
+          clang
+          flex-dev
+          git
+          bison
+          doas
+
+    - name: build
+      run: |
+        echo "::group::Configure"
+        mkdir build
+        cd build
+        export CXX=clang++
+        export CC=clang
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        echo "::endgroup::"
+        echo "::group::Build"
+        make -j4
+        echo "::endgroup::"
+        cpack
+      shell: alpine.sh {0}
