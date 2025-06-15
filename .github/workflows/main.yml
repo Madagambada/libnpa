@@ -1,0 +1,58 @@
+name: libnpa builder
+run-name: Build ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - "libnpa-v*.*.*"
+  
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: jirutka/setup-alpine@v1
+      with:
+        branch: edge
+        packages: >
+          boost-dev
+          make
+          cmake
+          clang
+          flex-dev
+          git
+          bison
+
+    - name: build
+      run: |
+        echo "::group::Configure"
+        mkdir build
+        cd build
+        export CXX=clang++
+        export CC=clang
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+        echo "::endgroup::"
+        echo "::group::Build"
+        make -j4
+        echo "::endgroup::"
+      shell: alpine.sh {0}
+
+    - name: Generate release body
+      run: |
+        echo "ReleaseVersion=$(cut -c 8- <<< ${{ github.ref_name }})" >> "$GITHUB_ENV"
+      shell: bash
+        
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: imgui-HelloWorld ${{ env.ReleaseVersion }}
+        generate_release_notes: true
+        tag_name: ${{ github.ref }}
+        files: build/imgui-HelloWorld
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
