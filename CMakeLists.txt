@@ -30,7 +30,6 @@ message(STATUS "Configuring libnpa version " ${LIBNPA_VERSION})
 # project name and language
 project (libnpa CXX)
 
-set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
 
 # include version number in header
