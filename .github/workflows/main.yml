@@ -40,4 +40,6 @@ jobs:
         echo "::group::Build"
         make -j4
         echo "::endgroup::"
+        make install
+        ls
       shell: alpine.sh {0}

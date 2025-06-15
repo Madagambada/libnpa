@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.5)
 # add modules
 set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 
+# policy for boost
+if(POLICY CMP0167)
+    cmake_policy(SET CMP0167 NEW)
+endif()
+
 # set version
 set(LIBNPA_VERSION_MAJOR "0")
 set(LIBNPA_VERSION_MINOR "5")
@@ -32,7 +37,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O2")
 configure_file(${PROJECT_SOURCE_DIR}/include/npaversion.hpp.in
     ${PROJECT_SOURCE_DIR}/include/npaversion.hpp)
 
-find_package(Boost REQUIRED COMPONENTS system locale filesystem)
+find_package(Boost REQUIRED COMPONENTS system locale filesystem CONFIG)
 find_package(ZLIB REQUIRED)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
