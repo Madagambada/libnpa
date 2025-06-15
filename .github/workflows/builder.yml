@@ -1,5 +1,5 @@
-name: libnpa Release builder
-run-name: Release Build ${{ github.ref_name }}
+name: libnpa builder
+run-name: Build ${{ github.ref_name }}
 
 on:
   push:
