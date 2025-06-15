@@ -84,11 +84,11 @@ set(LIBNPA_SOURCES
 )
 # Shared Library
 add_library(npa_shared SHARED ${LIBNPA_SOURCES})
-target_link_libraries(npa_shared ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+target_link_libraries(npa ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
 
 # Static Library
 add_library(npa_static STATIC ${LIBNPA_SOURCES})
-target_link_libraries(npa_static ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+target_link_libraries(npa ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
 
 # install headers and library
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
