@@ -4,7 +4,7 @@ run-name: Release Build ${{ github.ref_name }}
 on:
   push:
     tags:
-        - "libnpa-v*.*.*"
+        - "libnpa-*.*.*"
   
 permissions:
   contents: write
@@ -48,6 +48,6 @@ jobs:
       uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: /home/runner/work/libnpa/libnpa/build/libnpa-${{ github.ref_name }}-Linux.tar.bz2
+        asset_path: /home/runner/work/libnpa/libnpa/build/${{ github.ref_name }}-Linux.tar.bz2
         asset_name: libnpa-${{ github.event.release.tag_name }}.tar.bz2
         asset_content_type: application/x-bzip2
