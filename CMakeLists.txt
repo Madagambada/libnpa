@@ -66,7 +66,7 @@ flex_target(lexer ${CMAKE_SOURCE_DIR}/src/lexer.l ${CMAKE_SOURCE_DIR}/src/lexer.
 bison_target(parser ${CMAKE_SOURCE_DIR}/src/parser.y ${CMAKE_SOURCE_DIR}/src/parser.cpp)
 add_flex_bison_dependency(lexer parser)
 
-add_library(npa SHARED
+set(LIBNPA_SOURCES
     src/inpafile.cpp
     src/npafile.cpp
     src/nsbmagic.cpp
@@ -83,13 +83,23 @@ add_library(npa SHARED
     ${FLEX_lexer_OUTPUTS}
     src/nsbconstants.cpp
 )
-target_link_libraries(npa ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+# Shared Library
+add_library(npa_shared SHARED ${LIBNPA_SOURCES})
+target_link_libraries(npa_shared ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
+
+# Static Library
+add_library(npa_static STATIC ${LIBNPA_SOURCES})
+target_link_libraries(npa_static ${Boost_LIBRARIES} ${ZLIB_LIBRARIES})
 
 # install headers and library
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/
     DESTINATION include/libnpa
-    FILES_MATCHING PATTERN "*.hpp")
-install(TARGETS npa DESTINATION lib)
+    FILES_MATCHING PATTERN "*.hpp"
+)
+install(TARGETS npa_shared npa_static
+    ARCHIVE DESTINATION lib   # Static
+    LIBRARY DESTINATION lib   # Shared
+)
 
 # create packages
 set(CPACK_GENERATOR "TBZ2")
