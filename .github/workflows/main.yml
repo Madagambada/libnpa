@@ -41,18 +41,3 @@ jobs:
         make -j4
         echo "::endgroup::"
       shell: alpine.sh {0}
-
-    - name: Generate release body
-      run: |
-        echo "ReleaseVersion=$(cut -c 8- <<< ${{ github.ref_name }})" >> "$GITHUB_ENV"
-      shell: bash
-        
-    - name: Release
-      uses: softprops/action-gh-release@v2
-      with:
-        name: imgui-HelloWorld ${{ env.ReleaseVersion }}
-        generate_release_notes: true
-        tag_name: ${{ github.ref }}
-        files: build/imgui-HelloWorld
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
