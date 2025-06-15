@@ -13,7 +13,7 @@ CharWidth(CharWidth)
     ifstream File(Name, ios::binary);
     if (!File)
     {
-        cerr << "Could not open " << Name << endl;
+        std::cerr << "Could not open " << Name << endl;
         return;
     }
 
@@ -26,7 +26,7 @@ CharWidth(CharWidth)
     File.read(Sig, 4);
     if (memcmp(Sig, PeSig, 4) != 0)
     {
-        cerr << "Invalid PE signature" << endl;
+        std::cerr << "Invalid PE signature" << endl;
         return;
     }
 
