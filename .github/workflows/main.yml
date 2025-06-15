@@ -44,10 +44,12 @@ jobs:
         cpack
       shell: alpine.sh {0}
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
+    - name: Release
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: /home/runner/work/libnpa/libnpa/build/${{ github.ref_name }}-Linux.tar.bz2
-        asset_name: libnpa-${{ github.event.release.tag_name }}.tar.bz2
-        asset_content_type: application/x-bzip2
+        name: ${{ github.ref_name }}
+        generate_release_notes: true
+        tag_name: ${{ github.ref }}
+        files: /home/runner/work/libnpa/libnpa/build/${{ github.ref_name }}-Linux.tar.bz2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
