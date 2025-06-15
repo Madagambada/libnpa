@@ -1,6 +1,7 @@
 #ifndef EXE_FILE_HPP
 #define EXE_FILE_HPP
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <fstream>
