@@ -1,6 +1,7 @@
 #include "exefile.hpp"
 #include "npafile.hpp"
 #include <cstdint>
+#include <iostream>
 #include <cstring>
 
 static const char PeSig[4] = { 'P', 'E', 0, 0 };
