@@ -42,3 +42,11 @@ jobs:
         cpack
         ls
       shell: alpine.sh {0}
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./build/libnpa-*.tar.bz2
+        asset_name: libnpa-${{ github.ref_name }}-Linux-x64.tar.bz2
+        asset_content_type: application/x-bzip2
