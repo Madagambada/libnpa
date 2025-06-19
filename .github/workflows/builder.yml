@@ -1,4 +1,4 @@
-name: libnpa builder
+name: libnpa test builder
 run-name: Build ${{ github.ref_name }}
 
 on:
