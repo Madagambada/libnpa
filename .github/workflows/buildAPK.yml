@@ -72,7 +72,7 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        abuild checksum
+        doas abuild checksum
         abuild -r
         ls -la
       shell: alpine.sh {0}
