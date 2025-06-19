@@ -33,10 +33,6 @@ jobs:
 
     - name: build apk
       run: |
-        adduser -D abuilder
-        adduser abuilder abuild
-        adduser abuilder wheel
-        su - abuilder
         mkdir libnpa
         cd libnpa
         cat > APKBUILD << 'EOF'
@@ -78,6 +74,7 @@ jobs:
         EOF
         abuild checksum
         abuild -r
+        ls -la
       shell: alpine.sh {0}
 
     - name: Release
