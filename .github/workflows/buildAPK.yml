@@ -1,10 +1,10 @@
 name: libnpa apk builder
-run-name: Build ${{ github.ref_name }}
+run-name: Build apk ${{ github.ref_name }}
 
 on:
   push:
     tags:
-        - "libnpas-*.*.*"
+        - "libnpa-*.*.*"
   
 permissions:
   contents: write

@@ -1,10 +1,10 @@
 name: libnpa test builder
-run-name: Build ${{ github.ref_name }}
+run-name: Build test ${{ github.ref_name }}
 
 on:
   push:
     branches:
-      - '**'
+      - 'libnpas'
     tags-ignore:
       - 'libnpa-*'
   
