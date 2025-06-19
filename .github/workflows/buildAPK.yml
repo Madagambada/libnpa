@@ -1,0 +1,91 @@
+name: libnpa builder
+run-name: Build ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+        - "libnpa-*.*.*"
+  
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: jirutka/setup-alpine@v1
+      with:
+        branch: latest-stable
+        packages: >
+          boost-dev
+          make
+          cmake
+          clang
+          flex-dev
+          git
+          bison
+          doas
+          alpine-sdk
+          abuild
+
+    - name: build apk
+      run: |
+        adduser -D abuilder
+        adduser abuilder abuild
+        adduser abuilder wheel
+        su - abuilder
+        mkdir libnpa
+        cd libnpa
+        cat > APKBUILD << 'EOF'
+        # Maintainer:
+        pkgname=libnpa
+        pkgver=0.5.3
+        pkgrel=0
+        pkgdesc="library for manipulating Nitroplus game files"
+        url="https://github.com/Madagambada/libnpa"
+        arch="all"
+        license="MIT"
+        options="!check"
+        depends="boost-libs zlib"
+        makedepends="cmake samurai boost-dev zlib-dev flex bison"
+        subpackages="$pkgname-dev"
+        source="https://github.com/Madagambada/libnpa/archive/refs/tags/libnpa-$pkgver.tar.gz"
+        builddir="$srcdir/libnpa-libnpa-$pkgver"
+
+        build() {
+            cd "$builddir"
+            
+            local crossopts=""
+            [ "$CBUILD" != "$CHOST" ] && crossopts="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+
+            cmake -B build -G Ninja \
+                -DCMAKE_INSTALL_PREFIX=/usr \
+                -DCMAKE_INSTALL_LIBDIR=lib \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DBoost_USE_STATIC_LIBS=OFF \
+                $crossopts .
+            
+            cmake --build build
+        }
+
+        package() {
+            cd "$builddir/build"
+            DESTDIR="$pkgdir" cmake --install .
+        }
+        EOF
+        abuild checksum
+        abuild -r
+      shell: alpine.sh {0}
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{ github.ref_name }}
+        generate_release_notes: true
+        tag_name: ${{ github.ref }}
+        files: /home/abuilder/packages/abuilder/x86_64/libnpa-dev-0.5.3-r0.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
