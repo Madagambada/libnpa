@@ -33,9 +33,6 @@ jobs:
 
     - name: build apk
       run: |
-        adduser -D abuilder
-        adduser abuilder abuild
-        su - abuilder
         mkdir libnpa
         cd libnpa
         cat > APKBUILD << 'EOF'
