@@ -96,6 +96,8 @@ jobs:
         name: ${{ github.ref_name }}
         generate_release_notes: true
         tag_name: ${{ github.ref }}
-        files: /home/abuilder/packages/abuilder/x86_64/libnpa-dev-0.5.3-r0.apk
+        files: |
+          /home/abuilder/packages/libnpa/x86_64/libnpa-0.5.3-r0.apk
+          /home/abuilder/packages/libnpa/x86_64/libnpa-dev-0.5.3-r0.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
