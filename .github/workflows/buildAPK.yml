@@ -87,7 +87,7 @@ jobs:
         su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild-keygen -n -a -i"
         su - abuilder -c "export PATH='$PATH' && cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
         su - abuilder -c "export PATH='$PATH' && cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
-        ls -la /home/abuilder/packages/abuilder/
+        find /home/abuilder -name "*.apk"
       shell: alpine.sh --root {0}
 
     - name: Release
