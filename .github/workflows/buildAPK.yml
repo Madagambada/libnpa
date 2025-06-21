@@ -33,9 +33,9 @@ jobs:
 
     - name: build apk
       run: |
-        sudo adduser -D abuilder
-        sudo adduser abuilder abuild
-        sudo adduser abuilder wheel
+        su - adduser -D abuilder
+        su - adduser abuilder abuild
+        su - adduser abuilder wheel
         su - abuilder
         mkdir libnpa
         cd libnpa
