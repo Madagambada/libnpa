@@ -91,7 +91,7 @@ jobs:
 
     - name: host system
       run: |
-        find /home/runner/work -name "*.apk"
+        find / -name "*.apk"
       shell: bash
 
     - name: Release
