@@ -32,8 +32,17 @@ jobs:
           bash
           apk-tools
 
+    - name: Fix distfiles permissions
+      run: |
+        mkdir -p /var/cache/distfiles
+        chown root:abuild /var/cache/distfiles
+        chmod 775 /var/cache/distfiles
+      shell: alpine.sh --root {0}
+
     - name: build apk
       run: |
+        export CBUILD="$(uname -m)-alpine-linux-musl"
+        export CARCH="$(uname -m)"
         adduser -D abuilder
         adduser abuilder abuild
         adduser abuilder wheel
@@ -58,12 +67,15 @@ jobs:
         build() {
             cd "$builddir"
             
+            local crossopts=""
+            [ "$CBUILD" != "$CHOST" ] && crossopts="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
+
             cmake -B build -G Ninja \
                 -DCMAKE_INSTALL_PREFIX=/usr \
                 -DCMAKE_INSTALL_LIBDIR=lib \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DBoost_USE_STATIC_LIBS=OFF \
-                 .
+                $crossopts .
             
             cmake --build build
         }
