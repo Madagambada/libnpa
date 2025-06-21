@@ -76,8 +76,7 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        su - abuilder -c "CBUILD="x86_64-alpine-linux-musl""
-        su - abuilder -c "abuild checksum"
+        su - abuilder -c "CBUILD="x86_64-alpine-linux-musl" && abuild checksum"
         su - abuilder -c "abuild -r"
         ls -la
       shell: alpine.sh --root {0}
