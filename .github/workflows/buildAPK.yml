@@ -58,15 +58,12 @@ jobs:
         build() {
             cd "$builddir"
             
-            local crossopts=""
-            [ "$CBUILD" != "$CHOST" ] && crossopts="-DCMAKE_SYSTEM_NAME=Linux -DCMAKE_HOST_SYSTEM_NAME=Linux"
-
             cmake -B build -G Ninja \
                 -DCMAKE_INSTALL_PREFIX=/usr \
                 -DCMAKE_INSTALL_LIBDIR=lib \
                 -DCMAKE_BUILD_TYPE=Release \
                 -DBoost_USE_STATIC_LIBS=OFF \
-                $crossopts .
+                 .
             
             cmake --build build
         }
@@ -76,7 +73,7 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        su - abuilder -c "CBUILD="x86_64-alpine-linux-musl" && abuild checksum"
+        su - abuilder -c "abuild checksum"
         su - abuilder -c "abuild -r"
         ls -la
       shell: alpine.sh --root {0}
