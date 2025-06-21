@@ -33,10 +33,10 @@ jobs:
 
     - name: build apk
       run: |
-        su - adduser -D abuilder
-        su - adduser abuilder abuild
-        su - adduser abuilder wheel
-        su - abuilder
+        su -c "adduser -D abuilder"
+        su -c "adduser abuilder abuild"
+        su -c "adduser abuilder wheel"
+        su -c "abuilder"
         mkdir libnpa
         cd libnpa
         cat > APKBUILD << 'EOF'
