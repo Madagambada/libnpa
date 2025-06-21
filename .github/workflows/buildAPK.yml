@@ -102,8 +102,7 @@ jobs:
         generate_release_notes: true
         tag_name: ${{ github.ref }}
         files: |
-          /home/abuilder/packages/libnpa/x86_64/libnpa-0.5.3-r0.apk
-          /home/abuilder/packages/libnpa/x86_64/libnpa-dev-0.5.3-r0.apk
-          /home/runner/work/libnpa/libnpa/build/${{ github.ref_name }}-Linux.tar.bz2
+          /home/runner/rootfs/alpine-latest-x86_64/home/abuilder/packages/libnpa/x86_64/*.apk
+          /home/runner/work/libnpa/libnpa/build/*-Linux.tar.bz2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
