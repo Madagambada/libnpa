@@ -36,7 +36,6 @@ jobs:
         adduser -D abuilder
         adduser abuilder abuild
         adduser abuilder wheel
-        su - abuilder
         mkdir libnpa
         cd libnpa
         cat > APKBUILD << 'EOF'
@@ -76,8 +75,8 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        abuild checksum
-        abuild -r
+        su - abuilder -c "abuild checksum"
+        su - abuilder -c "abuild -r"
         ls -la
       shell: alpine.sh --root {0}
 
