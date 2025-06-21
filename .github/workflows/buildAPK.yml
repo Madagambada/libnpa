@@ -27,18 +27,34 @@ jobs:
           flex-dev
           git
           bison
-          doas
           alpine-sdk
           bash
           apk-tools
 
-    - name: build apk
+    - name: Setup build environment
       run: |
         adduser -D abuilder
-        adduser abuilder abuild
-        adduser abuilder wheel
-        mkdir libnpa
+        addgroup abuilder abuild
+        addgroup abuilder wheel
+        
+        echo "permit nopass :wheel" > /etc/doas.conf
+        chown root:root /etc/doas.conf
+        chmod 0400 /etc/doas.conf
+        
+        mkdir -p /var/cache/distfiles
+        chown root:abuild /var/cache/distfiles
+        chmod 775 /var/cache/distfiles
+        
+        mkdir -p /home/abuilder/.abuild
+        echo "PACKAGER=\"GitHub Actions <actions@github.com>\"" > /home/abuilder/.abuild/abuild.conf
+        su - abuilder -c "abuild-keygen -n -a -i"
+      shell: alpine.sh --root {0}
+
+    - name: Build APK
+      run: |
+        mkdir -p libnpa
         cd libnpa
+
         cat > APKBUILD << 'EOF'
         # Maintainer:
         pkgname=libnpa
@@ -76,25 +92,18 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        mkdir -p /var/cache/distfiles
-        chown root:abuild /var/cache/distfiles
-        chmod 775 /var/cache/distfiles
-        chown root:abuild /home/runner/work/libnpa/libnpa/libnpa
-        chmod 775 /home/runner/work/libnpa/libnpa/libnpa
+        
         export CBUILD="$(uname -m)-alpine-linux-musl"
         export CARCH="$(uname -m)"
-        abuild-keygen -n -a -i
-        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
-        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
-        ls -la
+        su - abuilder -c "cd '$PWD' && abuild checksum"
+        su - abuilder -c "cd '$PWD' && abuild -r"
       shell: alpine.sh --root {0}
 
-    - name: Release
+    - name: Release APK
       uses: softprops/action-gh-release@v2
       with:
         name: ${{ github.ref_name }}
         generate_release_notes: true
-        tag_name: ${{ github.ref }}
-        files: /home/abuilder/packages/abuilder/x86_64/libnpa-dev-0.5.3-r0.apk
+        files: /home/abuilder/packages/**/*.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
