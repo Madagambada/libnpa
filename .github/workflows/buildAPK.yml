@@ -30,6 +30,7 @@ jobs:
           doas
           alpine-sdk
           bash
+          apk-tools
 
     - name: build apk
       run: |
