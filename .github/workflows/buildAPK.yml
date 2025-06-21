@@ -85,11 +85,11 @@ jobs:
         export CARCH="$(uname -m)"
         echo "permit nopass :wheel" > /etc/doas.conf
         chown root:root /etc/doas.conf
+        export PATH="/sbin:/usr/sbin:/bin:/usr/bin:$PATH"
+
         su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild-keygen -n -a -i"
-        cd /etc/apk/keys
-        ls -la
-        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
-        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
+        su - abuilder -c "export PATH='$PATH' && cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
+        su - abuilder -c "export PATH='$PATH' && cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
 
       shell: alpine.sh --root {0}
 
