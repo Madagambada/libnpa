@@ -85,8 +85,8 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        su - abuilder -c "abuild checksum"
-        su - abuilder -c "abuild -r"
+        su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
+        su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
         ls -la
       shell: alpine.sh --root {0}
 
