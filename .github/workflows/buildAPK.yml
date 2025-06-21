@@ -91,7 +91,8 @@ jobs:
 
     - name: host system
       run: |
-        ls -la /
+        sudo find /root -name "*.apk"
+        sudo find /home -name "*.apk"
       shell: bash
 
     - name: Release
