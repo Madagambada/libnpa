@@ -3,8 +3,8 @@ run-name: Build apk ${{ github.ref_name }}
 
 on:
   push:
-    branches:
-      - '*'
+    tags:
+        - "libnpa-*.*.*"
   
 permissions:
   contents: write
@@ -89,12 +89,6 @@ jobs:
         su - abuilder -c "export PATH='$PATH' && cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
       shell: alpine.sh --root {0}
 
-    - name: host system
-      run: |
-        sudo find /root -name "*.apk"
-        sudo find /home -name "*.apk"
-      shell: bash
-
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
@@ -103,6 +97,5 @@ jobs:
         tag_name: ${{ github.ref }}
         files: |
           /home/runner/rootfs/alpine-latest-x86_64/home/abuilder/packages/libnpa/x86_64/*.apk
-          /home/runner/work/libnpa/libnpa/build/*-Linux.tar.bz2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
