@@ -29,7 +29,6 @@ jobs:
           bison
           doas
           alpine-sdk
-          sudo
 
     - name: build apk
       run: |
