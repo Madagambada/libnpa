@@ -85,8 +85,8 @@ jobs:
         EOF
         pwd
         ls -la
-        su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
-        su - abuilder -c "export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
+        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
+        su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
         ls -la
       shell: alpine.sh --root {0}
 
