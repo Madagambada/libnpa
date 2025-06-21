@@ -41,8 +41,6 @@ jobs:
 
     - name: build apk
       run: |
-        export CBUILD="$(uname -m)-alpine-linux-musl"
-        export CARCH="$(uname -m)"
         adduser -D abuilder
         adduser abuilder abuild
         adduser abuilder wheel
