@@ -33,6 +33,10 @@ jobs:
 
     - name: build apk
       run: |
+        adduser -D abuilder
+        adduser abuilder abuild
+        adduser abuilder wheel
+        su - abuilder
         mkdir libnpa
         cd libnpa
         cat > APKBUILD << 'EOF'
@@ -72,12 +76,10 @@ jobs:
             DESTDIR="$pkgdir" cmake --install .
         }
         EOF
-        chown $USER:abuild /var/cache/distfiles
-        chmod 775 /var/cache/distfiles
         abuild checksum
         abuild -r
         ls -la
-      shell: alpine.sh {0}
+      shell: alpine.sh --root {0}
 
     - name: Release
       uses: softprops/action-gh-release@v2
