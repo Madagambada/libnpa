@@ -81,6 +81,7 @@ jobs:
         chmod 775 /var/cache/distfiles
         chown root:abuild /home/runner/work/libnpa/libnpa/libnpa
         chmod 775 /home/runner/work/libnpa/libnpa/libnpa
+        su - abuilder -c "abuild-keygen -n -a -i"
         su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild checksum"
         su - abuilder -c "cd /home/runner/work/libnpa/libnpa/libnpa && export CBUILD=\"$(uname -m)-alpine-linux-musl\" && export CARCH=\"$(uname -m)\" && abuild -r"
         ls -la
